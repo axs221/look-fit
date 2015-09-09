@@ -25,6 +25,9 @@ const router = new Router(on => {
   on('/authorize', async (state) => {
     console.log('state');
     console.log(state);
+    if (!state.query) {
+      return <div/>
+    }
     const data = await http.get(`/api/content/authorize?code=${state.query.code}`);
     const content = await http.get(`/api/content?path=/`);
     console.log('data');
