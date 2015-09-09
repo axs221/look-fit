@@ -22,6 +22,16 @@ const router = new Router(on => {
 
   on('/login', async () => <LoginPage />);
 
+  on('/authorize', async (state) => {
+    console.log('state');
+    console.log(state);
+    const data = await http.get(`/api/content/authorize?code=${state.query.code}`);
+    const content = await http.get(`/api/content?path=/`);
+    console.log('data');
+    console.log(data);
+    return content && <ContentPage accessToken={data.accessToken} {...content} />;
+  });
+
   on('/register', async () => <RegisterPage />);
 
   on('*', async (state) => {

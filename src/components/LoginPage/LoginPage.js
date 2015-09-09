@@ -20,10 +20,13 @@ class LoginPage {
           <h1>{title}</h1>
           <p>Hi</p>
           <a href="https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=229TPJ&scope=activity%20nutrition%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight">Login here</a>
+          <br/>
+          <a href="/auth">Login here</a>
         </div>
       </div>
     );
   }
+
 
 }
 

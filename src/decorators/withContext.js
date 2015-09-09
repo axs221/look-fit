@@ -11,7 +11,8 @@ function withContext(ComposedComponent) {
         onInsertCss: PropTypes.func,
         onSetTitle: PropTypes.func,
         onSetMeta: PropTypes.func,
-        onPageNotFound: PropTypes.func
+        onPageNotFound: PropTypes.func,
+        accessToken: PropTypes.string
       })
     };
 
@@ -19,7 +20,8 @@ function withContext(ComposedComponent) {
       onInsertCss: PropTypes.func.isRequired,
       onSetTitle: PropTypes.func.isRequired,
       onSetMeta: PropTypes.func.isRequired,
-      onPageNotFound: PropTypes.func.isRequired
+      onPageNotFound: PropTypes.func.isRequired,
+      accessToken: PropTypes.string.isRequired
     };
 
     getChildContext() {
@@ -28,7 +30,8 @@ function withContext(ComposedComponent) {
         onInsertCss: context.onInsertCss || emptyFunction,
         onSetTitle: context.onSetTitle || emptyFunction,
         onSetMeta: context.onSetMeta || emptyFunction,
-        onPageNotFound: context.onPageNotFound || emptyFunction
+        onPageNotFound: context.onPageNotFound || emptyFunction,
+        accessToken: context.accessToken || ''
       };
     }
 

@@ -5,6 +5,8 @@ import { Router } from 'express';
 import jade from 'jade';
 import fm from 'front-matter';
 import fs from '../utils/fs';
+import secret from '../secret_config'
+import https from 'https'
 
 // A folder with Jade/Markdown/HTML content pages
 const CONTENT_DIR = join(__dirname, './content');
@@ -18,6 +20,64 @@ const parseJade = (path, jadeContent) => {
 };
 
 const router = new Router();
+
+router.get('/authorize', async (req, res, next) => {
+  try {
+    console.log('Authorizing...');
+    console.log(req);
+
+    if (!req.query) {
+      // TODO - TESTING
+      res.status(200).send({ 'accessToken': '' });
+      return;
+    }
+
+    //let body = 'client_id=229TPJ&grant_type=authorization_code&redirect_uri=http%3A%2F%2Fshawnaxsom.com%2Fcallback'
+    let body = 'client_id=229TPJ&grant_type=authorization_code&redirect_uri=http://shawnaxsom.com/callback'
+    body += '&code=' + req.query.code;
+    console.log('#############################');
+    console.log(body);
+    console.log('#############################');
+
+    let options = {
+      host: 'api.fitbit.com',
+      port: 443,
+      path: '/oauth2/token',
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/x-www-form-urlencoded',
+        'Content-Length' : Buffer.byteLength(body, 'utf8'),
+        'Authorization' : 'Basic ' + secret.base64OfClientIdColonClientSecret
+      }
+    };
+
+    console.log(JSON.stringify(options));
+
+    console.log('Requesting token');
+
+    let tokenReq = https.request(options, function(tokenRes) {
+      console.log('STATUS: ' + tokenRes.statusCode);
+      console.log('HEADERS: ' + JSON.stringify(tokenRes.headers));
+      tokenRes.setEncoding('utf8');
+
+      tokenRes.on('data', function (chunk) {
+        let data = JSON.parse(chunk);
+        console.log('Access Token: ' + data.access_token);
+        res.status(200).send({ 'accessToken': data.access_token });
+      });
+      tokenRes.on('error', function (error) {
+        console.log('ERROR: ' + error);
+      });
+    });
+
+
+    tokenReq.write(body);
+    tokenReq.end();
+    console.log('Request sent');
+  } catch(err) {
+    console.log(err.message);
+  }
+});
 
 router.get('/', async (req, res, next) => {
   try {
