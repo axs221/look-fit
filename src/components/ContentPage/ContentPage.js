@@ -3,6 +3,7 @@
 import React, { PropTypes } from 'react';
 import styles from './ContentPage.css';
 import withStyles from '../../decorators/withStyles';
+import $ from 'jquery';
 
 @withStyles(styles)
 class ContentPage {
@@ -19,13 +20,32 @@ class ContentPage {
     accessToken: PropTypes.string.isRequired
   };
 
+  componentWillMount() {
+    console.log('componentWillMount');
+    console.log(this.props.accessToken);
+    if (this.props.accessToken != undefined && this.props.accessToken != null) {
+      this.getHeartRateData(this.props.accessToken);
+    }
+  };
+
+  getHeartRateData(accessToken) {
+    console.log('Getting heart rate data');        
+    $.ajax({
+      //url: 'https://api.fitbit.com/1/user/-/activities/heart/date/today/1w.json',
+      url: 'https://api.fitbit.com/1/user/-/activities/heart/date/today/1d/1sec.json',
+      headers: {"Authorization": "Bearer " + accessToken},
+      success: (data) => {
+        console.log('Success!');
+        console.log(data);
+      }
+    });
+
+  };
+
   render() {
-    console.log('My props');
-    console.log(this.props);
     this.context.onSetTitle(this.props.title);
     return (
       <div>
-        <p>Access token: {this.props.accessToken}</p>
         <div className="ContentPage">
           <div className="ContentPage-container">
             {

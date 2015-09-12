@@ -24,7 +24,6 @@ const router = new Router();
 router.get('/authorize', async (req, res, next) => {
   try {
     console.log('Authorizing...');
-    console.log(req);
 
     if (!req.query) {
       // TODO - TESTING
@@ -35,9 +34,6 @@ router.get('/authorize', async (req, res, next) => {
     //let body = 'client_id=229TPJ&grant_type=authorization_code&redirect_uri=http%3A%2F%2Fshawnaxsom.com%2Fcallback'
     let body = 'client_id=229TPJ&grant_type=authorization_code&redirect_uri=http://shawnaxsom.com/callback'
     body += '&code=' + req.query.code;
-    console.log('#############################');
-    console.log(body);
-    console.log('#############################');
 
     let options = {
       host: 'api.fitbit.com',
@@ -51,13 +47,7 @@ router.get('/authorize', async (req, res, next) => {
       }
     };
 
-    console.log(JSON.stringify(options));
-
-    console.log('Requesting token');
-
     let tokenReq = https.request(options, function(tokenRes) {
-      console.log('STATUS: ' + tokenRes.statusCode);
-      console.log('HEADERS: ' + JSON.stringify(tokenRes.headers));
       tokenRes.setEncoding('utf8');
 
       tokenRes.on('data', function (chunk) {
@@ -73,7 +63,6 @@ router.get('/authorize', async (req, res, next) => {
 
     tokenReq.write(body);
     tokenReq.end();
-    console.log('Request sent');
   } catch(err) {
     console.log(err.message);
   }

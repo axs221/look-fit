@@ -18,6 +18,7 @@
     "front-matter": "1.0.0",
     "history": "1.8.1",
     "jade": "1.11.0",
+    "jquery": "^2.1.4",
     "lodash": "3.10.1",
     "longjohn": "^0.2.8",
     "normalize.css": "3.0.3",
